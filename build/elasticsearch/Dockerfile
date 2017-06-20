@@ -1,6 +1,6 @@
 # This Dockerfile was generated from templates/Dockerfile.j2
 
-FROM centos:7
+FROM gbraad/armhf-centos:7
 LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
 
 ENV ELASTIC_CONTAINER true
