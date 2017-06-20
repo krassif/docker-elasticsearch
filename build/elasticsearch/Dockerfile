@@ -1,13 +1,10 @@
 # This Dockerfile was generated from templates/Dockerfile.j2
 
-FROM gbraad/armhf-centos:7
+FROM armv7/armhf-java7
 LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
 
 ENV ELASTIC_CONTAINER true
 ENV PATH /usr/share/elasticsearch/bin:$PATH
-ENV JAVA_HOME /usr/lib/jvm/jre-1.8.0-openjdk
-
-RUN yum update -y && yum install -y java-1.8.0-openjdk-headless wget which && yum clean all
 
 RUN groupadd -g 1000 elasticsearch && adduser -u 1000 -g 1000 -d /usr/share/elasticsearch elasticsearch
 
@@ -38,7 +35,8 @@ COPY log4j2.properties config/
 COPY bin/es-docker bin/es-docker
 
 USER root
-RUN chown elasticsearch:elasticsearch config/elasticsearch.yml config/log4j2.properties bin/es-docker && \
+RUN apt-get update && \
+    chown elasticsearch:elasticsearch config/elasticsearch.yml config/log4j2.properties bin/es-docker && \
     chmod 0750 bin/es-docker
 
 USER elasticsearch
