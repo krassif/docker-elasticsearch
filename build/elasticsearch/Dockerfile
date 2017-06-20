@@ -25,7 +25,7 @@ RUN wget --progress=bar:force https://download.elastic.co/elasticsearch/elastics
 RUN set -ex && for esdirs in config data logs plugins; do \
         mkdir -p "var/$esdirs"; \
         chown -R elasticsearch:elasticsearch "$esdirs"; \
-        ln -s "var/$esdirs" "$esdirs"
+        ln -s "var/$esdirs" "$esdirs"; \
     done
 
 USER elasticsearch
