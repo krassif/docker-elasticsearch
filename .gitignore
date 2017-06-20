@@ -1,7 +1,2 @@
-**/.*.swp
-**/.ropeproject
-**/.cache
-*.pyc
-/venv
-/docker-compose.yml
-build/elasticsearch/Dockerfile
+
+venv

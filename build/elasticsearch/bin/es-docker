@@ -16,7 +16,7 @@ do
     if [[ "$envvar_key" =~ ^[a-z_]+\.[a-z_]+ ]]
     then
         if [[ ! -z $envvar_value ]]; then
-          es_opt="-E${envvar_key}=${envvar_value}"
+          es_opt="-Des.${envvar_key}=${envvar_value}"
           es_opts+=("${es_opt}")
         fi
     fi
@@ -36,4 +36,5 @@ done < <(env)
 # will run in.
 export ES_JAVA_OPTS="-Des.cgroups.hierarchy.override=/ $ES_JAVA_OPTS"
 
-exec bin/elasticsearch "${es_opts[@]}"
+echo "${es_opts[@]}"
+exec bin/elasticsearch -f "${es_opts[@]}"
