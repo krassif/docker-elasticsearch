@@ -22,7 +22,7 @@ RUN wget --progress=bar:force https://download.elastic.co/elasticsearch/elastics
 
 ##    test $EXPECTED_SHA == $(sha1sum elasticsearch-0.90.8.tar.gz | awk '{print $1}') &&
 
-RUN set -ex && for esdirs in config data logs; do \
+RUN set -ex && for esdirs in var/config var/data var/logs var/plugins; do \
         mkdir -p "$esdirs"; \
         chown -R elasticsearch:elasticsearch "$esdirs"; \
     done
@@ -34,7 +34,6 @@ USER elasticsearch
 COPY elasticsearch.yml config/
 COPY log4j2.properties config/
 COPY bin/es-docker bin/es-docker
-MKDIR var
 
 USER root
 RUN apt-get update && \
