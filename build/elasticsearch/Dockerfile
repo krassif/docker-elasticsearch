@@ -34,6 +34,7 @@ USER elasticsearch
 COPY elasticsearch.yml config/
 COPY log4j2.properties config/
 COPY bin/es-docker bin/es-docker
+MKDIR var
 
 USER root
 RUN apt-get update && \
