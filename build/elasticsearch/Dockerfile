@@ -6,8 +6,8 @@ LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
 ENV ELASTIC_CONTAINER true
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
-RUN groupadd -g 1000 elasticsearch && \
-    adduser -u 1000 --group 1000 --home /usr/share/elasticsearch elasticsearch
+RUN groupadd --gid 1000 elasticsearch && \
+    adduser -uid 1000 --gid 1000 --home /usr/share/elasticsearch elasticsearch
 
 WORKDIR /usr/share/elasticsearch
 
