@@ -28,6 +28,9 @@ RUN set -ex && for esdirs in config data logs plugins; do \
         ln -s "var/$esdirs" "$esdirs"; \
     done
 
+# Prepare for the health checks
+RUN apt-get -y --force-yes install curl jq
+
 USER elasticsearch
 
 # Install x-pack and also the ingest-{agent,geoip} modules required for Filebeat
