@@ -28,9 +28,6 @@ RUN set -ex && for esdirs in config data logs plugins; do \
         ln -s "var/$esdirs" "$esdirs"; \
     done
 
-# Prepare for the health checks
-RUN apt-get -y --force-yes install curl jq
-
 USER elasticsearch
 
 # Install x-pack and also the ingest-{agent,geoip} modules required for Filebeat
@@ -41,10 +38,14 @@ COPY bin/es-docker bin/es-docker
 
 USER root
 RUN apt-get update && \
+    apt-get -y --force-yes install curl jq lsof && \
     chown elasticsearch:elasticsearch config/elasticsearch.yml config/log4j2.properties bin/es-docker && \
     chmod 0750 bin/es-docker
 
 USER elasticsearch
+
+# Define overridable health check
+
 CMD ["/bin/bash", "bin/es-docker"]
 
 EXPOSE 9200 9300
