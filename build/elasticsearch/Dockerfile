@@ -22,7 +22,7 @@ RUN wget --progress=bar:force https://download.elastic.co/elasticsearch/elastics
 
 ##    test $EXPECTED_SHA == $(sha1sum elasticsearch-0.90.8.tar.gz | awk '{print $1}') &&
 
-RUN set -ex && for esdirs in config data logs plugins; do \
+RUN set -ex && for esdirs in config data logs plugins health; do \
         mkdir -p "var/$esdirs"; \
         chown -R elasticsearch:elasticsearch "var/$esdirs"; \
         ln -s "var/$esdirs" "$esdirs"; \
@@ -45,6 +45,16 @@ RUN apt-get update && \
 USER elasticsearch
 
 # Define overridable health check
+HEALTHCHECK --interval=60s --timeout=5s --retries=2 CMD \
+    PORT=$(lsof -b -i TCP:9200-9299 | grep java | grep 92[0-9][0-9] -o); \
+    HEALTHD="./var/health"; \
+    curl --fail --max-time 1 "http://localhost:$PORT/"; \
+    if [ -d "$HEALTHD" ] \
+    then \
+        for f in `find "$HEALTHD" -type f -perm /a+x` \
+            do eval $f || exit 1 \
+        done; \
+    fi;
 
 CMD ["/bin/bash", "bin/es-docker"]
 
