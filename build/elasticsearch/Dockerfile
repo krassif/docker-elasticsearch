@@ -44,11 +44,11 @@ RUN apt-get update && \
 
 RUN apt-get install nano
 
-USER elasticsearch
-
 # Run an extensible health check
-COPY elastic-healthcheck ./
+COPY elastic-healthcheck /usr/local/bin/
 HEALTHCHECK --interval=20s --timeout=5s --retries=2 CMD [ "elastic-healthcheck" ]
+
+USER elasticsearch
 
 CMD ["/bin/bash", "bin/es-docker"]
 
