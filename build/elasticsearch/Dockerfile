@@ -42,6 +42,8 @@ RUN apt-get update && \
     chown elasticsearch:elasticsearch config/elasticsearch.yml config/log4j2.properties bin/es-docker && \
     chmod 0750 bin/es-docker
 
+RUN apt-get install nano
+
 USER elasticsearch
 
 # Run an extensible health check
