@@ -44,17 +44,9 @@ RUN apt-get update && \
 
 USER elasticsearch
 
-# Define overridable health check
-HEALTHCHECK --interval=60s --timeout=5s --retries=2 CMD \
-    PORT=$(lsof -b -i TCP:9200-9299 | grep java | grep 92[0-9][0-9] -o); \
-    HEALTHD="./var/health"; \
-    curl --fail --max-time 1 "http://localhost:$PORT/"; \
-    if [ -d "$HEALTHD" ] \
-    then \
-        for f in `find "$HEALTHD" -type f -perm /a+x` \
-            do eval $f || exit 1 \
-        done; \
-    fi;
+# Run an extensible health check
+COPY elastic-healthcheck ./
+HEALTHCHECK --interval=20s --timeout=5s --retries=2 CMD [ "elastic-healthcheck" ]
 
 CMD ["/bin/bash", "bin/es-docker"]
 
