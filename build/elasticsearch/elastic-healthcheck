@@ -1,14 +1,17 @@
 #!/bin/bash
 
+set -eo pipefail
+
 # figure what port the elastic search has bound to
 # NOTE: The port may not be the one expected if
 # running multiple instances with --net=host.
+HOST="$(hostname --ip-address || echo '127.0.0.1')"
 PORT=$(lsof -b -i TCP:9200-9299 | grep java | grep 92[0-9][0-9] -o);
 
 # run a basic check
-curl --fail --max-time 1 "http://localhost:$PORT/" || exit 1;
+curl --fail --max-time 1 "http://$HOST:$PORT/" || exit 1;
 
-# look for additinal health check scripts
+# look for additional, on the container volumes health check scripts
 HEALTHD="./var/health";
 
 if [ -d "$HEALTHD" ]
@@ -17,3 +20,5 @@ then
         do eval $f || exit 1
     done;
 fi;
+
+exit 0
