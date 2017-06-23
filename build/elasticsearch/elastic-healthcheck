@@ -6,7 +6,7 @@ set -eo pipefail
 # NOTE: The port may not be the one expected if
 # running multiple instances with --net=host.
 HOST="$(hostname --ip-address || echo '127.0.0.1')"
-PORT=$(lsof -b -i TCP:9200-9299 | grep java | grep 92[0-9][0-9] -o);
+PORT="$(lsof -b -i TCP:9200-9299 | grep java | grep .*\(LISTEN -o | grep 92[0-9][0-9] -o)"
 
 # run a basic check
 curl --fail --max-time 1 "http://$HOST:$PORT/" || exit 1;
