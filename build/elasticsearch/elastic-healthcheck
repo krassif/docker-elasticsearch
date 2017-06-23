@@ -17,7 +17,7 @@ HEALTHD="./var/health";
 if [ -d "$HEALTHD" ]
 then
     for f in `find "$HEALTHD" -type f -perm /a+x`
-		do eval "HOST=\"$HOST\" PORT=\"$PORT\" \"$f\"" || exit 1
+        do eval "HOST=\"$HOST\" PORT=\"$PORT\" \"$f\"" || exit 1
     done;
 fi;
 
