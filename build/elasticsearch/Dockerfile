@@ -3,6 +3,8 @@
 FROM armv7/armhf-java7
 LABEL maintainer "Elastic Docker Team <docker@elastic.co>"
 
+ARG E_VERSION=0.90.8
+
 ENV ELASTIC_CONTAINER true
 ENV PATH /usr/share/elasticsearch/bin:$PATH
 
@@ -12,15 +14,15 @@ RUN groupadd --gid 1000 elasticsearch && \
 WORKDIR /usr/share/elasticsearch
 
 # Download/extract defined ES version. busybox tar can't strip leading dir.
-RUN wget --progress=bar:force https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-0.90.8.tar.gz && \
-    EXPECTED_SHA=$(wget -O - https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-0.90.8.tar.gz.sha1.txt) && \
-    tar zxf elasticsearch-0.90.8.tar.gz && \
-    chown -R elasticsearch:elasticsearch elasticsearch-0.90.8 && \
-    mv elasticsearch-0.90.8/* . && \
-    rmdir elasticsearch-0.90.8 && \
-    rm elasticsearch-0.90.8.tar.gz
+RUN wget --progress=bar:force https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-$E_VERSION.tar.gz && \
+    EXPECTED_SHA=$(wget -O - https://download.elastic.co/elasticsearch/elasticsearch/elasticsearch-$E_VERSION.tar.gz.sha1.txt) && \
+    tar zxf elasticsearch-$E_VERSION.tar.gz && \
+    chown -R elasticsearch:elasticsearch elasticsearch-$E_VERSION && \
+    mv elasticsearch-$E_VERSION/* . && \
+    rmdir elasticsearch-$E_VERSION && \
+    rm elasticsearch-$E_VERSION.tar.gz
 
-##    test $EXPECTED_SHA == $(sha1sum elasticsearch-0.90.8.tar.gz | awk '{print $1}') &&
+##    test $EXPECTED_SHA == $(sha1sum elasticsearch-$E_VERSION.tar.gz | awk '{print $1}') &&
 
 RUN set -ex && for esdirs in config data logs plugins health; do \
         mkdir -p "var/$esdirs"; \
