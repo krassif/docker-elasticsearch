@@ -28,6 +28,7 @@ RUN set -ex && for esdirs in config data logs plugins health; do \
         mkdir -p "var/$esdirs"; \
         chown -R elasticsearch:elasticsearch "var/$esdirs"; \
         ln -s "var/$esdirs" "$esdirs"; \
+        chown -R elasticsearch:elasticsearch "$esdirs" \
     done
 
 USER elasticsearch
